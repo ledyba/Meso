@@ -15,11 +15,17 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
+	private ConfigMaster master_;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		new BatteryService().startResident(this);
+		master_ = new ConfigMaster(this);
+		if(master_.isNotificationEnabled()){
+			new BatteryService().startResident(this);
+		}
+		setStatus();
 	}
 
 	@Override
@@ -50,6 +56,10 @@ public class MainActivity extends Activity {
 		voltage.setText(String.format("%dmV", st.getVoltage()));
 		temp.setText(String.format("%.1f℃", st.getTemperature()));
 	}
+	
+	private void setStatus(){
+		((CheckBox)findViewById(R.id.notification_button)).setChecked(master_.isNotificationEnabled());
+	}
 
 	@Override
 	protected void onPause() {
@@ -68,8 +78,10 @@ public class MainActivity extends Activity {
 	public void onNotificationChanged(final View v){
 		final CheckBox box = (CheckBox) v;
 		if(!box.isChecked()){
+			master_.setNotificationEnabled(false);
 			BatteryService.stopResidentIfActive(this);
 		}else{
+			master_.setNotificationEnabled(true);
 			new BatteryService().startResident(this);
 		}
 	}
