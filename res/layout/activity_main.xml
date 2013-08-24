@@ -17,6 +17,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginLeft="10sp"
+            android:layout_marginRight="10sp"
             android:text="@string/battery_info"
             android:textSize="32sp" />
 
@@ -24,92 +26,83 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginLeft="10sp"
+            android:layout_marginRight="10sp"
             android:stretchColumns="1,0" >
 
             <TableRow>
 
                 <TextView
-                    android:layout_marginLeft="10sp"
-                    android:layout_marginRight="10sp"
                     android:text="@string/level"
                     android:textSize="24sp" />
 
                 <TextView
                     android:id="@+id/level"
                     android:layout_marginLeft="10sp"
-                    android:layout_marginRight="10sp"
                     android:textSize="24sp" />
             </TableRow>
 
             <TableRow>
 
                 <TextView
-                    android:layout_marginLeft="10sp"
-                    android:layout_marginRight="10sp"
                     android:text="@string/health"
                     android:textSize="24sp" />
 
                 <TextView
                     android:id="@+id/health"
                     android:layout_marginLeft="10sp"
-                    android:layout_marginRight="10sp"
                     android:textSize="24sp" />
             </TableRow>
 
             <TableRow>
 
                 <TextView
-                    android:layout_marginLeft="10sp"
-                    android:layout_marginRight="10sp"
                     android:text="@string/status"
                     android:textSize="24sp" />
 
                 <TextView
                     android:id="@+id/status"
                     android:layout_marginLeft="10sp"
-                    android:layout_marginRight="10sp"
                     android:textSize="24sp" />
             </TableRow>
 
             <TableRow>
 
                 <TextView
-                    android:layout_marginLeft="10sp"
-                    android:layout_marginRight="10sp"
                     android:text="@string/voltage"
                     android:textSize="24sp" />
 
                 <TextView
                     android:id="@+id/voltage"
                     android:layout_marginLeft="10sp"
-                    android:layout_marginRight="10sp"
                     android:textSize="24sp" />
             </TableRow>
 
             <TableRow>
 
                 <TextView
-                    android:layout_marginLeft="10sp"
-                    android:layout_marginRight="10sp"
                     android:text="@string/temperature"
                     android:textSize="24sp" />
 
                 <TextView
                     android:id="@+id/temperature"
                     android:layout_marginLeft="10sp"
-                    android:layout_marginRight="10sp"
                     android:textSize="24sp" />
             </TableRow>
         </TableLayout>
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="20sp" />
+            android:layout_height="20sp"
+            android:layout_marginLeft="10sp"
+            android:layout_marginRight="10sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginLeft="10sp"
+            android:layout_marginRight="10sp"
             android:text="@string/Settings"
             android:textSize="32sp" />
 
@@ -117,35 +110,38 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginLeft="10sp"
+            android:layout_marginRight="10sp"
             android:stretchColumns="0" >
 
             <TableRow>
 
                 <TextView
-                    android:layout_marginLeft="10sp"
-                    android:layout_marginRight="10sp"
                     android:text="@string/EnableNotification"
                     android:textSize="24sp" />
 
                 <CheckBox
                     android:id="@+id/notification_button"
                     android:layout_marginLeft="10sp"
-                    android:layout_marginRight="10sp"
                     android:onClick="onNotificationChanged"
                     android:textSize="24sp" />
             </TableRow>
         </TableLayout>
-        
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10sp"
+            android:layout_marginRight="10sp"
             android:layout_gravity="center"
             android:text="@string/Support"
             android:textSize="32sp" />
-        
+
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10sp"
+            android:layout_marginRight="10sp"
             android:layout_gravity="center"
             android:stretchColumns="0" >
 

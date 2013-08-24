@@ -1,4 +1,6 @@
-package org.ledyba.stamina;
+package org.ledyba.meso;
+
+import org.ledyba.meso.battery.BatteryService;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

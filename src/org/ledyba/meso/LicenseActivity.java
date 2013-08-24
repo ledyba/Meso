@@ -1,4 +1,4 @@
-package org.ledyba.stamina;
+package org.ledyba.meso;
 
 import android.app.Activity;
 import android.os.Bundle;

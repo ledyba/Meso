@@ -1,4 +1,4 @@
-package org.ledyba.stamina;
+package org.ledyba.meso;
 
 import android.content.Context;
 import android.content.SharedPreferences;

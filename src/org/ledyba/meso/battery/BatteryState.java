@@ -1,10 +1,12 @@
-package org.ledyba.stamina;
+package org.ledyba.meso.battery;
+
+import org.ledyba.meso.R;
 
 import android.content.Intent;
 import android.os.BatteryManager;
 import android.util.Log;
 
-final class BatteryState {
+public final class BatteryState {
 	private final int max_;
 	private final int level_;
 	private final String health_;
@@ -16,79 +18,75 @@ final class BatteryState {
 	private final String technology_;
 	private final int smallIcon_;
 	
+	private final int cacheLeftPercentage_;
+	
 	private final static String TAG="BatteryState";
 
 	public BatteryState(Intent intent){
-		max_ = intent.getIntExtra("scale", 100);
-		level_ = intent.getIntExtra("level", 0);
-		switch (intent.getIntExtra("health", BatteryManager.BATTERY_HEALTH_UNKNOWN)) {
+		this.max_ = intent.getIntExtra("scale", 100);
+		this.level_ = intent.getIntExtra("level", 0);
+		this.health_ = healthToString(intent.getIntExtra("health", BatteryManager.BATTERY_HEALTH_UNKNOWN));
+		this.plugged_ = plugToString(intent.getIntExtra("plugged", 0));
+		this.status_ = statusToString(intent.getIntExtra("status", BatteryManager.BATTERY_STATUS_UNKNOWN));
+		this.present_ = intent.getBooleanExtra("present", false);
+		this.voltage_ = intent.getIntExtra("voltage", 0);
+		this.temperature_ = intent.getIntExtra("temperature", 0) / 10.0f;
+		this.technology_ = intent.getStringExtra("technology");
+		this.smallIcon_ = intent.getIntExtra("icon-small", 0);
+		
+		cacheLeftPercentage_ = getLevel()*100/getMax();
+	}
+	
+	private final String healthToString(final int health) {
+		switch (health) {
 		case BatteryManager.BATTERY_HEALTH_UNKNOWN:
-			health_ = "Unknown";
-			break;
+			return "Unknown";
 		case BatteryManager.BATTERY_HEALTH_DEAD:
-			health_ = "Dead";
-			break;
+			return "Dead";
 		case BatteryManager.BATTERY_HEALTH_GOOD:
-			health_ = "Good";
-			break;
+			return "Good";
 		case BatteryManager.BATTERY_HEALTH_OVERHEAT:
-			health_ = "Overheat";
-			break;
+			return "Overheat";
 		case BatteryManager.BATTERY_HEALTH_OVER_VOLTAGE:
-			health_ = "Over Voltage";
-			break;
+			return "Over Voltage";
 		case BatteryManager.BATTERY_HEALTH_UNSPECIFIED_FAILURE:
-			health_ = "Unspecified Failure";
-			break;
+			return "Unspecified Failure";
 		default:
-			health_ = "????";
-			Log.w(TAG, String.format("Unknwon Health: %d", intent.getIntExtra("health", BatteryManager.BATTERY_HEALTH_UNKNOWN)));
-			break;
+			Log.w(TAG, String.format("Unknwon Health: %d", health));
+			return "????";
 		}
-		switch (intent.getIntExtra("plugged", 0)) {
+	}
+	private final String plugToString(int plug) {
+		switch (plug) {
 		case BatteryManager.BATTERY_PLUGGED_AC:
-			this.plugged_ = "AC";
-			break;
+			return "AC";
 		case BatteryManager.BATTERY_PLUGGED_USB:
-			this.plugged_ = "USB";
-			break;
+			return "USB";
 		case BatteryManager.BATTERY_PLUGGED_WIRELESS:
-			this.plugged_ = "Wireless";
-			break;
+			return "Wireless";
 		case 0:
-			this.plugged_ = "??????";
-			break;
+			return "??????";
 		default:
-			this.plugged_ = "??????";
-			Log.w(TAG, String.format("Unknwon Health: %d", intent.getIntExtra("plugged", 0)));
-			break;
+			Log.w(TAG, String.format("Unknwon Health: %d", plug));
+			return "??????";
 		}
-		switch (intent.getIntExtra("status", BatteryManager.BATTERY_STATUS_UNKNOWN)) {
+	}
+	private final String statusToString(int status){
+		switch (status) {
 		case BatteryManager.BATTERY_STATUS_CHARGING:
-			this.status_ = "Charging";
-			break;
+			return "Charging";
 		case BatteryManager.BATTERY_STATUS_DISCHARGING:
-			this.status_ = "Discharging";
-			break;
+			return "Discharging";
 		case BatteryManager.BATTERY_STATUS_FULL:
-			this.status_ = "Full";
-			break;
+			return "Full";
 		case BatteryManager.BATTERY_STATUS_NOT_CHARGING:
-			this.status_ = "Not Charging";
-			break;
+			return "Not Charging";
 		case BatteryManager.BATTERY_STATUS_UNKNOWN:
-			this.status_ = "Unknown";
-			break;
+			return "Unknown";
 		default:
-			this.status_ = "??????";
-			Log.w(TAG, String.format("Unknwon Status: %d", intent.getIntExtra("status", BatteryManager.BATTERY_STATUS_UNKNOWN)));
-			break;
+			Log.w(TAG, String.format("Unknwon Status: %d", status));
+			return "??????";
 		}
-		present_ = intent.getBooleanExtra("present", false);
-		voltage_ = intent.getIntExtra("voltage", 0);
-		temperature_ = intent.getIntExtra("temperature", 0) / 10.0f;
-		technology_ = intent.getStringExtra("technology");
-		smallIcon_ = intent.getIntExtra("icon-small", 0);
 	}
 
 	public static boolean isBatteryIntent(final Intent it) {
@@ -99,8 +97,8 @@ final class BatteryState {
 		return max_;
 	}
 	
-	public float getLeftPercentage(){
-		return getLevel()*100.0f/getMax();
+	public int getLeftPercentage(){
+		return cacheLeftPercentage_;
 	}
 
 	public int getLevel() {

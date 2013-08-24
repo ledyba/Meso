@@ -1,6 +1,9 @@
-package org.ledyba.stamina;
+package org.ledyba.meso;
 
-import org.ledyba.stamina.BatteryReceiver.BatteryListener;
+import org.ledyba.meso.battery.BatteryReceiver;
+import org.ledyba.meso.battery.BatteryReceiver.BatteryListener;
+import org.ledyba.meso.battery.BatteryService;
+import org.ledyba.meso.battery.BatteryState;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -9,7 +12,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
@@ -85,5 +87,4 @@ public class MainActivity extends Activity {
 			new BatteryService().startResident(this);
 		}
 	}
-
 }

@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string name="app_name">Stamina</string>
+    <string name="app_name">Meso</string>
+    
+    <string name="battery_info">BatteryInfo</string>
     <string name="level">Level</string>
     <string name="health">Health</string>
     <string name="status">Status</string>
     <string name="voltage">Voltage</string>
     <string name="temperature">Temp</string>
+    
     <string name="Settings">Settings</string>
-    <string name="battery_info">BatteryInfo</string>
     <string name="EnableNotification">Enable notification</string>
+    <string name="EnableAlert">Enable alert</string>
+    
     <string name="Support">Support</string>
     <string name="MakeDonation">Make donation</string>
     <string name="ViewSource">View source</string>
