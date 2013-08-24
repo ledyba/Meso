@@ -4,6 +4,7 @@ import org.ledyba.meso.battery.BatteryReceiver;
 import org.ledyba.meso.battery.BatteryReceiver.BatteryListener;
 import org.ledyba.meso.battery.BatteryService;
 import org.ledyba.meso.battery.BatteryState;
+import org.ledyba.meso.donation.DonationActivity;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -86,5 +87,14 @@ public class MainActivity extends Activity {
 			master_.setNotificationEnabled(true);
 			new BatteryService().startResident(this);
 		}
+	}
+	
+	public void onMakeDonationButtonClick(final View v) {
+		final Intent it = new Intent(this, DonationActivity.class);
+		startActivity(it);
+	}
+	public void onLicenseButtonClick(final View v) {
+		final Intent it = new Intent(this, LicenseActivity.class);
+		startActivity(it);
 	}
 }

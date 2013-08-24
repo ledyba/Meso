@@ -18,4 +18,6 @@
     <string name="ViewSource">View source</string>
     <string name="ViewLicense">View license</string>
     
+    <string name="donation">Donation</string>
+    
 </resources>

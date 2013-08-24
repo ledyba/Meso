@@ -150,6 +150,7 @@
                 <Button
                     android:layout_span="2"
                     android:text="@string/MakeDonation"
+                    android:onClick="onMakeDonationButtonClick"
                     android:textSize="24sp" />
             </TableRow>
 
@@ -166,6 +167,7 @@
                 <Button
                     android:layout_span="2"
                     android:text="@string/ViewLicense"
+                    android:onClick="onLicenseButtonClick"
                     android:textSize="24sp" />
             </TableRow>
         </TableLayout>
