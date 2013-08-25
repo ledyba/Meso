@@ -1,6 +1,9 @@
 package org.ledyba.meso.battery;
 
 import java.util.Locale;
+
+import org.ledyba.meso.MainActivity;
+
 import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -25,7 +28,7 @@ public final class BatteryNotifer {
 	}
 	
 	private final PendingIntent createContentIntent(){
-		final Intent notificationIntent = new Intent(context_, context_.getClass());
+		final Intent notificationIntent = new Intent(context_, MainActivity.class);
 		return PendingIntent.getActivity(context_, pendingIntentCode_, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 	}
 	

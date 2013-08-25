@@ -131,26 +131,81 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginLeft="10sp"
             android:layout_marginRight="10sp"
+            android:text="@string/app_name"
+            android:textSize="32sp" />
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginLeft="10sp"
+            android:layout_marginRight="10sp"
+            android:stretchColumns="1" >
+
+            <TableRow>
+
+                <TextView
+                    android:text="@string/Version"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:text="@string/AppVersion"
+                    android:id="@+id/appversion"
+                    android:layout_marginLeft="10sp"
+                    android:textSize="24sp" />
+            </TableRow>
+            <TableRow>
+
+                <TextView
+                    android:text="@string/Author"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:text="@string/PSI"
+                    android:layout_marginLeft="10sp"
+                    android:textSize="24sp" />
+            </TableRow>
+            
+            <TableRow>
+
+                <TextView
+                    android:text="@string/URL"
+                    android:textSize="24sp" />
+
+                <Button
+                    android:text="@string/PSI_URL"
+                    android:layout_marginLeft="10sp"
+                    android:onClick="onUrlClick"
+                    android:textSize="14sp" />
+            </TableRow>
+        </TableLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10sp"
+            android:layout_marginRight="10sp"
             android:text="@string/Support"
             android:textSize="32sp" />
 
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginLeft="10sp"
             android:layout_marginRight="10sp"
-            android:layout_gravity="center"
             android:stretchColumns="0" >
 
             <TableRow>
 
                 <Button
                     android:layout_span="2"
-                    android:text="@string/MakeDonation"
                     android:onClick="onMakeDonationButtonClick"
+                    android:text="@string/MakeDonation"
                     android:textSize="24sp" />
             </TableRow>
 
@@ -158,8 +213,8 @@
 
                 <Button
                     android:layout_span="2"
-                    android:text="@string/ViewSource"
                     android:onClick="onViewSourceClick"
+                    android:text="@string/ViewSource"
                     android:textSize="24sp" />
             </TableRow>
 
@@ -167,8 +222,8 @@
 
                 <Button
                     android:layout_span="2"
-                    android:text="@string/ViewLicense"
                     android:onClick="onLicenseButtonClick"
+                    android:text="@string/ViewLicense"
                     android:textSize="24sp" />
             </TableRow>
         </TableLayout>

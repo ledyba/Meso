@@ -11,7 +11,16 @@
     
     <string name="Settings">Settings</string>
     <string name="EnableNotification">Enable notification</string>
-    <string name="EnableAlert">Enable alert</string>
+
+    <string name="Version">Ver</string>
+    <string name="AppVersion">1.0</string>
+    
+    <string name="Author">Author</string>
+    <string name="PSI">PSI</string>
+    
+    <string name="URL">Web</string>
+    <string name="PSI_URL">http://ledyba.org/</string>
+    
     
     <string name="Support">Support</string>
     <string name="MakeDonation">Make donation</string>
