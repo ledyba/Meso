@@ -45,7 +45,7 @@ public class BillingWrapper {
 			final Bundle res = this.spirit.getSkuDetails(BillingVersion, packageName, "inapp", bun);
 			final int respCode = res.getInt("RESPONSE_CODE");
 			if( respCode != 0 ) { //error
-				
+				new Left<Exception, List<Product>>(new Exception(errorToString(respCode)));
 			}
 			final List<String> details = res.getStringArrayList("DETAILS_LIST");
 			for( String detail : details ){
@@ -75,7 +75,7 @@ public class BillingWrapper {
 				}
 				final int respCode_ = b.getInt("RESPONSE_CODE");
 				if( respCode_ != 0 ) {
-					return new Left<Exception, String>(new Exception(Integer.toString(respCode_)));
+					return new Left<Exception, String>(new Exception(errorToString(respCode_)));
 				}
 				itemList.addAll(b.getStringArrayList("INAPP_PURCHASE_ITEM_LIST"));
 				dataList.addAll( b.getStringArrayList("INAPP_PURCHASE_DATA_LIST") );
@@ -101,13 +101,36 @@ public class BillingWrapper {
 		});
 	}
 	
+	private String errorToString(int err){
+		switch (err) {
+		case 0: //RESULT_OK = 0 - success
+			return "OK";
+		case 1: //RESULT_USER_CANCELED = 1 - user pressed back or canceled a dialog
+			return "User canceled.";
+		case 3: //RESULT_BILLING_UNAVAILABLE = 3 - this billing API version is not supported for the type requested
+			return "Billing unavailable";
+		case 4: //RESULT_ITEM_UNAVAILABLE = 4 - requested SKU is not available for purchase
+			return "Item unavailable";
+		case 5: //RESULT_DEVELOPER_ERROR = 5 - invalid arguments provided to the API
+			return "Developer error";
+		case 6: //RESULT_ERROR = 6 - Fatal error during the API action
+			return "Fatal error";
+		case 7: //RESULT_ITEM_ALREADY_OWNED = 7 - Failure to purchase since item is already owned
+			return "Item already owned";
+		case 8: //RESULT_ITEM_NOT_OWNED = 8 - Failure to consume since item is not owned
+			return "Item not found";
+		default:
+			return "????";
+		}
+	}
+	
 	public Either<Exception, PendingIntent> createIntentFor(Product prod, String payload){
 		Bundle b;
 		try {
 			b = this.spirit.getBuyIntent(BillingVersion, packageName, prod.getProductId(), "inapp", payload);
 			final int respCode_ = b.getInt("RESPONSE_CODE");
 			if( respCode_ != 0 ) {
-				return new Left<Exception, PendingIntent>(new Exception(Integer.toString(respCode_)));
+				return new Left<Exception, PendingIntent>(new Exception(errorToString(respCode_)));
 			}
 			return new Right<Exception, PendingIntent>( b.<PendingIntent>getParcelable("BUY_INTENT") );
 		} catch (RemoteException e) {

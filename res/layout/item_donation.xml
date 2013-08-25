@@ -10,7 +10,7 @@
         android:layout_gravity="center"
         android:layout_marginLeft="10sp"
         android:layout_marginRight="10sp"
-        android:text="@+id/title"
+        android:id="@+id/title"
         android:textSize="32sp" />
 
     <TableLayout
@@ -31,6 +31,7 @@
         <TableRow>
 
             <TextView
+                android:id="@+id/priceText"
                 android:text="@string/price"
                 android:textSize="24sp" />
 

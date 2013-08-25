@@ -7,12 +7,16 @@ import java.util.concurrent.Executors;
 
 import org.ledyba.functional.Either;
 import org.ledyba.functional.Func;
+import org.ledyba.functional.Left;
+import org.ledyba.functional.Right;
 import org.ledyba.meso.R;
 
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender.SendIntentException;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
@@ -24,6 +28,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.vending.billing.IInAppBillingService;
 
@@ -33,7 +38,7 @@ public class DonationActivity extends Activity {
 	private BillingWrapper billing_ = null;
 	private ServiceConnection serviceConnection_ = null;
 	
-	private static final List<String> ProductIDs = Arrays.asList("One", "Five", "Ten");
+	private static final List<String> ProductIDs = Arrays.asList("android.test.purchased", "One", "Five", "Ten");
 	
 	private final static String TAG="DonationActivity";
 
@@ -76,7 +81,7 @@ public class DonationActivity extends Activity {
 		
 		private Purchase getPurchaseOf(final String prodId){
 			for(Purchase p : purchases){
-				if(p.getProductId().equals(prodId) && p.getPurchaseState() != Purchase.State.Purchased){
+				if(p.getProductId().equals(prodId) && p.getPurchaseState() == Purchase.State.Purchased){
 					return p;
 				}
 			}
@@ -85,23 +90,62 @@ public class DonationActivity extends Activity {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			ViewGroup v = (ViewGroup)(convertView == null ? LayoutInflater.from(DonationActivity.this).inflate(R.layout.item_donation, parent) : convertView);
+			ViewGroup v = (ViewGroup)(convertView == null ? LayoutInflater.from(DonationActivity.this).inflate(R.layout.item_donation, null) : convertView);
 			TextView title = (TextView) v.findViewById(R.id.title);
 			TextView desc = (TextView) v.findViewById(R.id.description);
 			TextView price = (TextView) v.findViewById(R.id.price);
-			Product p = products.get(position);
+			TextView priceText = (TextView) v.findViewById(R.id.priceText);
+			final Product p = products.get(position);
+			final Purchase pu = getPurchaseOf( p.getProductId() );
 			title.setText(p.getTitle());
 			desc.setText(p.getDescription());
 			price.setText(p.getPrice());
-			Purchase pu = getPurchaseOf( p.getProductId() );
+			v.setEnabled(true);
 			if(pu != null){
-				v.setEnabled(false);
+				title.setEnabled(false);
+				desc.setEnabled(false);
+				price.setEnabled(false);
+				priceText.setEnabled(false);
+				v.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						Toast.makeText(DonationActivity.this, "Already donated.", Toast.LENGTH_LONG).show();
+					}
+				});
 			}else{
-				v.setEnabled(true);
+				title.setEnabled(true);
+				desc.setEnabled(true);
+				price.setEnabled(true);
+				priceText.setEnabled(true);
+				v.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						startBuy(p);
+					}
+				});
 			}
 			return v;
 		}
-		
+	}
+	
+	private void startBuy(final Product p){
+		billing_.createIntentFor(p, "").bind(new Func<PendingIntent, Either<Exception, Void>>() {
+			@Override
+			public Either<Exception, Void> apply(PendingIntent pi) {
+				try {
+					startIntentSenderForResult(pi.getIntentSender(), 0, new Intent(), 0, 0, 0);
+					return new Right<Exception, Void>(null);
+				} catch (SendIntentException e) {
+					return new Left<Exception, Void>(e);
+				}
+			}
+		}).ifLeft(new Func<Exception, Void>() {
+			@Override
+			public Void apply(Exception i) {
+				Log.e(TAG, "Error on start buy intent: ", i);
+				return null;
+			}
+		});
 	}
 	
 	private void listUp(){
