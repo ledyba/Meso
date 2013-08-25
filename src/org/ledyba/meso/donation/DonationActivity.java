@@ -109,7 +109,7 @@ public class DonationActivity extends Activity {
 				v.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						Toast.makeText(DonationActivity.this, "Already donated.", Toast.LENGTH_LONG).show();
+						Toast.makeText(DonationActivity.this, "Already donated.", Toast.LENGTH_SHORT).show();
 					}
 				});
 			}else{
