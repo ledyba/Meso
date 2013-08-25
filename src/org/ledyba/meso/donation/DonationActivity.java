@@ -1,13 +1,13 @@
 package org.ledyba.meso.donation;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.ledyba.functional.Either;
+import org.ledyba.functional.Func;
 import org.ledyba.meso.R;
-
-import com.android.vending.billing.IInAppBillingService;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -15,13 +15,25 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
-import android.os.RemoteException;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.android.vending.billing.IInAppBillingService;
 
 public class DonationActivity extends Activity {
-	private IInAppBillingService billingService_ = null;
+	private final ExecutorService th = Executors.newCachedThreadPool();
+	private Handler hd = new Handler();
+	private BillingWrapper billing_ = null;
 	private ServiceConnection serviceConnection_ = null;
+	
+	private static final List<String> ProductIDs = Arrays.asList("One", "Five", "Ten");
 	
 	private final static String TAG="DonationActivity";
 
@@ -32,8 +44,106 @@ public class DonationActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_donation);
+		ListView lv = (ListView) findViewById(R.id.products);
+		lv.setAdapter(this.adapter = new DonationAdapter());
 	}
+	
+	private DonationAdapter adapter;
+	
+	private class DonationAdapter extends BaseAdapter {
+		private List<Product> products;
+		private List<Purchase> purchases;
+		public void update(final List<Product> products, final List<Purchase> purchases){
+			this.products = products;
+			this.purchases = purchases;
+			this.notifyDataSetInvalidated();
+		}
 
+		@Override
+		public int getCount() {
+			return products == null ? 0 : this.products.size();
+		}
+
+		@Override
+		public Object getItem(int position) {
+			return products.get(position);
+		}
+
+		@Override
+		public long getItemId(int position) {
+			return 0;
+		}
+		
+		private Purchase getPurchaseOf(final String prodId){
+			for(Purchase p : purchases){
+				if(p.getProductId().equals(prodId) && p.getPurchaseState() != Purchase.State.Purchased){
+					return p;
+				}
+			}
+			return null;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			ViewGroup v = (ViewGroup)(convertView == null ? LayoutInflater.from(DonationActivity.this).inflate(R.layout.item_donation, parent) : convertView);
+			TextView title = (TextView) v.findViewById(R.id.title);
+			TextView desc = (TextView) v.findViewById(R.id.description);
+			TextView price = (TextView) v.findViewById(R.id.price);
+			Product p = products.get(position);
+			title.setText(p.getTitle());
+			desc.setText(p.getDescription());
+			price.setText(p.getPrice());
+			Purchase pu = getPurchaseOf( p.getProductId() );
+			if(pu != null){
+				v.setEnabled(false);
+			}else{
+				v.setEnabled(true);
+			}
+			return v;
+		}
+		
+	}
+	
+	private void listUp(){
+		th.submit(new Runnable() {
+			@Override
+			public void run() {
+				billing_.fetchProductDetails(ProductIDs).bind(new Func<List<Product>, Either<Exception,Void>>() {
+					@Override
+					public Either<Exception, Void> apply(final List<Product> products) {
+					return billing_.fetchPurchases().bind(new Func<List<Purchase>, Either<Exception,Void>>() {
+						@Override
+						public Either<Exception, Void> apply(final List<Purchase> purchases) {
+							hd.post(new Runnable() {
+								@Override
+								public void run() {
+									updateItems(products, purchases);
+								}
+							});
+							return null;
+						}
+					});
+					}
+				}).ifLeft(new Func<Exception, Void>() {
+
+					@Override
+					public Void apply(Exception i) {
+						Log.e(TAG, "Exception on updating catalog: ",i);
+						return null;
+					}
+				});
+			}
+		});
+	}
+	private void updateItems(final List<Product> products, final List<Purchase> purchases){
+		findViewById(R.id.now_loading).setVisibility(View.GONE);
+		if( products.size() > 0 ) {
+			findViewById(R.id.productsWrapper).setVisibility(View.VISIBLE);
+			this.adapter.update(products, purchases);
+		}else{
+			findViewById(R.id.not_found).setVisibility(View.VISIBLE);
+		}
+	}
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -42,14 +152,14 @@ public class DonationActivity extends Activity {
 			@Override
 			public void onServiceConnected(ComponentName name, IBinder service) {
 				Log.d(TAG, "ServiceConnected: "+name);
-				DonationActivity.this.billingService_ = IInAppBillingService.Stub.asInterface(service);
-
+				billing_ = new BillingWrapper(DonationActivity.this, IInAppBillingService.Stub.asInterface(service));
+				listUp();
 			}
 
 			@Override
 			public void onServiceDisconnected(ComponentName name) {
 				Log.d(TAG, "ServiceDisconnected: "+name);
-				DonationActivity.this.billingService_ = null;
+				billing_ = null;
 			}
 		};
 
@@ -66,87 +176,6 @@ public class DonationActivity extends Activity {
 			this.serviceConnection_ = null;
 		}
 		super.onPause();
-	}
-	
-	static final int BillingVersion = 3;
-	static final class Product {
-		private final String productId_;
-		private final String title_;
-		private final String description_;
-		private final String price_;
-		private final String type_;
-		public Product(final String productId, final String type, final String price, final String title, final String desc){
-			this.productId_ = productId;
-			this.type_ = type;
-			this.price_ = price;
-			this.title_ = title;
-			this.description_ = desc;
-		}
-		public static Product fromString( final String detail ) throws JSONException{
-			JSONObject object = new JSONObject( detail );
-			final String productId = object.getString("productId");
-			final String type = object.getString("type");
-			final String price = object.getString("price");
-			final String title = object.getString("title");
-			final String description = object.getString("description");
-			return new Product(productId, type, price, title, description);
-		}
-		public String getProductId() {
-			return productId_;
-		}
-		public String getTitle() {
-			return title_;
-		}
-		public String getDescription() {
-			return description_;
-		}
-		public String getPrice() {
-			return price_;
-		}
-		public String getType() {
-			return type_;
-		}
-		
-		
-	}
-	
-	public boolean isBillingSupported(){
-		try {
-			final int supported = this.billingService_.isBillingSupported(BillingVersion, getPackageName(), "inapp");
-			if( supported == 0 ) {
-				return true;
-			}else{
-				
-			}
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
-	
-	public List<Product> fetchProducts( final List<String> ids ){
-		final Bundle bun = new Bundle();
-		bun.putStringArrayList("ITEM_ID_LIST", new ArrayList<String>(ids));
-		List<Product> r = new ArrayList<DonationActivity.Product>();
-		try {
-			final Bundle res = this.billingService_.getSkuDetails(BillingVersion, getPackageName(), "inapp", bun);
-			final int respCode = res.getInt("RESPONSE_CODE");
-			if( respCode != 0 ) { //error
-				
-			}
-			final List<String> details = res.getStringArrayList("DETAILS_LIST");
-			for( String detail : details ){
-				r.add(Product.fromString(detail));
-			}
-			return r;
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
 	}
 
 }

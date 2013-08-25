@@ -19,5 +19,8 @@
     <string name="ViewLicense">View license</string>
     
     <string name="donation">Donation</string>
+    <string name="price">Price</string>
+    <string name="nowLoading">Now loading#8230;</string>
+    <string name="notFound">Not found.</string>
     
 </resources>

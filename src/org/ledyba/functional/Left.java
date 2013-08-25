@@ -6,28 +6,37 @@ public class Left<E, A> extends Either<E, A> {
 		this.spirit = error;
 	}
 	@Override
-	boolean isLeft() {
+	public boolean isLeft() {
 		return true;
 	}
 	@Override
-	boolean isRight() {
+	public boolean isRight() {
 		return false;
 	}
 	@Override
-	E getLeftOr(E default_) {
+	public E getLeftOr(E default_) {
 		return spirit;
 	}
 	@Override
-	E getLeft() {
+	public E getLeft() {
 		return spirit;
 	}
 	@Override
-	A getRightOr(A default_) {
+	public A getRightOr(A default_) {
 		return default_;
 	}
 	@Override
-	A getRight() {
+	public A getRight() {
 		throw new IllegalStateException("You cannot get right value from left.");
+	}
+	@Override
+	public Either<E, A> ifRight(Func<A, ?> fun) {
+		return this;
+	}
+	@Override
+	public Either<E, A> ifLeft(Func<E, ?> fun) {
+		fun.apply(spirit);
+		return this;
 	}
 
 }
