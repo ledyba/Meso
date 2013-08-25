@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -92,6 +93,9 @@ public class MainActivity extends Activity {
 	public void onMakeDonationButtonClick(final View v) {
 		final Intent it = new Intent(this, DonationActivity.class);
 		startActivity(it);
+	} 
+	public void onViewSourceClick(final View v){
+		startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/ledyba/Meso/")));
 	}
 	public void onLicenseButtonClick(final View v) {
 		final Intent it = new Intent(this, LicenseActivity.class);
