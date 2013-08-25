@@ -48,6 +48,13 @@
             android:layout_gravity="center"
             android:visibility="gone"
             android:text="@string/notFound" />
-    </FrameLayout>
+        <TextView
+            android:id="@+id/error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:text="@string/Error" />
+        </FrameLayout>
 
 </LinearLayout>

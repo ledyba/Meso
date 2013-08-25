@@ -20,7 +20,8 @@
     
     <string name="donation">Donation</string>
     <string name="price">Price</string>
-    <string name="nowLoading">Now loading#8230;</string>
+    <string name="nowLoading">Now loading&#8230;</string>
     <string name="notFound">Not found.</string>
+    <string name="Error">Error has occurred during loading</string>
     
 </resources>

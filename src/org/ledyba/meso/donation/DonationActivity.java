@@ -173,6 +173,8 @@ public class DonationActivity extends Activity {
 					@Override
 					public Void apply(Exception i) {
 						Log.e(TAG, "Exception on updating catalog: ",i);
+						findViewById(R.id.now_loading).setVisibility(View.GONE);
+						findViewById(R.id.error).setVisibility(View.VISIBLE);
 						return null;
 					}
 				});
