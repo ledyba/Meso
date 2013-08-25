@@ -77,11 +77,13 @@ public class MainActivity extends Activity {
 		final TextView status = (TextView)findViewById(R.id.status);
 		final TextView voltage = (TextView)findViewById(R.id.voltage);
 		final TextView temp = (TextView)findViewById(R.id.temperature);
+		final TextView tech = (TextView) findViewById(R.id.technology);
 		
 		level.setText(String.format("%d%%", (int)st.getLeftPercentage()));
 		health.setText(String.format("%s", st.getHealth()));
 		status.setText(String.format("%s", st.getStatus()));
 		voltage.setText(String.format("%dmV", st.getVoltage()));
+		tech.setText(st.getTechnology());
 		temp.setText(String.format("%.1f℃", st.getTemperature()));
 	}
 	

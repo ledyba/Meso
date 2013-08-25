@@ -8,6 +8,7 @@
     <string name="status">状態</string>
     <string name="voltage">電圧</string>
     <string name="temperature">温度</string>
+    <string name="technology">種類</string>
     
     <string name="Settings">設定</string>
     <string name="EnableNotification">通知を有効にする</string>

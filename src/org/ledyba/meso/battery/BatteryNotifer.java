@@ -35,7 +35,7 @@ public final class BatteryNotifer {
 	private final int getNotificationIconResouceId(final int leftPercentage){
 		return
 				leftPercentage >= 70 ? BatteryResources.getGreen(leftPercentage):
-				leftPercentage >  20 ? BatteryResources.getWhite(leftPercentage):
+				leftPercentage >= 20 ? BatteryResources.getWhite(leftPercentage):
 									   BatteryResources.getRed(leftPercentage);
 	}
 	

@@ -8,6 +8,7 @@
     <string name="status">Status</string>
     <string name="voltage">Voltage</string>
     <string name="temperature">Temp</string>
+    <string name="technology">Tech</string>
     
     <string name="Settings">Settings</string>
     <string name="EnableNotification">Enable notification</string>
