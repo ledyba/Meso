@@ -38,7 +38,7 @@ public class DonationActivity extends Activity {
 	private BillingWrapper billing_ = null;
 	private ServiceConnection serviceConnection_ = null;
 	
-	private static final List<String> ProductIDs = Arrays.asList("android.test.purchased", "One", "Five", "Ten");
+	private static final List<String> ProductIDs = Arrays.asList("one", "five", "ten");
 	
 	private final static String TAG="DonationActivity";
 
@@ -184,7 +184,7 @@ public class DonationActivity extends Activity {
 	private void updateItems(final List<Product> products, final List<Purchase> purchases){
 		findViewById(R.id.now_loading).setVisibility(View.GONE);
 		if( products.size() > 0 ) {
-			findViewById(R.id.productsWrapper).setVisibility(View.VISIBLE);
+			findViewById(R.id.products).setVisibility(View.VISIBLE);
 			this.adapter.update(products, purchases);
 		}else{
 			findViewById(R.id.not_found).setVisibility(View.VISIBLE);

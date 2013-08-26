@@ -8,6 +8,10 @@ In app purchaseも実装し、寄付を行うことができます。
 
 実用に耐えると思いますが、開発目的自体は課金APIのテストです。
 
+Google play
+============
+https://play.google.com/store/apps/details?id=org.ledyba.meso&hl=ja
+
 License
 ========
 Meso is licensed under GPL v3.
