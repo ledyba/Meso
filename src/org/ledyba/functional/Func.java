@@ -1,5 +1,5 @@
 package org.ledyba.functional;
 
 public interface Func<I, R> {
-	R apply(I i);
+	R apply(final I i);
 }

@@ -100,7 +100,18 @@ public class BillingWrapper {
 			}
 		});
 	}
-	
+	public Either<Exception, Boolean> consumePurchase(final Purchase p){
+		try {
+			final int code = this.spirit.consumePurchase(BillingVersion, packageName, p.getPurchaseToken());
+			if ( 0 == code ){
+				return new Right<Exception, Boolean>(true);
+			}else{
+				return new Left<Exception, Boolean>(new IllegalStateException(errorToString(code)));
+			}
+		} catch (RemoteException e) {
+			return new Left<Exception, Boolean>(e);
+		}
+	}
 	private String errorToString(int err){
 		switch (err) {
 		case 0: //RESULT_OK = 0 - success
