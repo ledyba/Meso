@@ -72,8 +72,9 @@ public class BatteryService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		Log.d(TAG, "onStartCommand: "+intent.getAction());
-		if(STOP_INTENT.equals(intent.getAction())){
+		final String action = intent == null ? "(null)" : intent.getAction();
+		Log.d(TAG, "onStartCommand: "+action);
+		if(STOP_INTENT.equals(action)){
 			stopResident();
 		}
 		return super.onStartCommand(intent, flags, startId);

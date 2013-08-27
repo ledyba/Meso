@@ -19,8 +19,11 @@ public class BatteryReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
+		if(intent == null){
+			return;
+		}
 		if (!BatteryState.isBatteryIntent(intent)) {
-			final String action = intent == null ? "NullAction!" : intent.getAction();
+			final String action = intent.getAction();
 			final String detail = String.format("We need \"%s\", but \"%s\" has been received.", Intent.ACTION_BATTERY_CHANGED, action);
 			throw new IllegalArgumentException(detail);
 		}

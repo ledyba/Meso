@@ -4,7 +4,6 @@ import java.util.Locale;
 
 import org.ledyba.meso.MainActivity;
 
-import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
