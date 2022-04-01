@@ -1,12 +1,12 @@
 Meso - Simple Battery Indicator
 =======
-Androidü���ΥХåƥ꡼��Notification�Ȥ������Τ��Ƥ���륢�ץꥱ�������Ǥ���
+Android端末のバッテリーをNotificationとして通知してくれるアプリケーションです。
 
-���̤�ü���Ǥϣ�%ñ�̤Ǥϻ��̤��狼��ޤ��󤬡����Υ��ץ��Ȥ���ʬ����ޤ���
+普通の端末では１%単位では残量がわかりませんが、このアプリを使うと分かります。
 
-In app purchase������������դ�Ԥ����Ȥ��Ǥ��ޤ���
+In app purchaseも実装し、寄付を行うことができます。
 
-���Ѥ��Ѥ���Ȼפ��ޤ�������ȯ��Ū���Τϲݶ�API�Υƥ��ȤǤ���
+実用に耐えると思いますが、開発目的自体は課金APIのテストです。
 
 Google play
 ============
@@ -14,7 +14,7 @@ https://play.google.com/store/apps/details?id=org.ledyba.meso&hl=ja
 
 License
 ========
-Meso is licensed under GPL v3.
+Meso is licensed under AGPL v3 or later.
 
 Icon
 =======
